@@ -6,7 +6,6 @@ const MONGO_URI =
 mongoose
   .connect(MONGO_URI)
   .then((x:any) => {
-    console.log("X!",x)
     const dbName = x.connections[0].name;
     console.log("connected to mongo!");
   })

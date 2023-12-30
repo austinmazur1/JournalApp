@@ -9,7 +9,6 @@ export const isAuthenticated = expressjwt({
 
 // Function used to extract the JWT token from the request's 'Authorization' Headers
 function getTokenFromHeaders(req: any) {
-  console.log("req toke", req);
   // Check if the token is available on the request Headers
   if (
     req.headers.authorization &&
