@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import {
   ActivityIndicator,
+  Alert,
   Button,
   KeyboardAvoidingView,
   Platform,
@@ -14,24 +15,37 @@ import { Text, View } from "../components/Themed";
 import { useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import axios from "axios";
+import { router } from "expo-router";
 
-const backendUrl = 'http://192.168.1.41:5005/api';
-
+const backendUrl = "http://192.168.1.41:5005/api";
 
 export default function ModalScreen() {
   const [date, setDate] = useState("");
   const [journalEntry, setJournalEntry] = useState("");
+  const [mood, setMood] = useState("");
+  const [subject, setSubject] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      const res = await axios(`${backendUrl}/entries`)
-      console.log("submitting", res.data);
+      const res = await axios.post(`${backendUrl}/new-entry`, {
+        date,
+        subject,
+        mood,
+        note: journalEntry,
+      });
+      if (res.status === 200) {
+        Alert.alert(res.data);
+      }
     } catch (error) {
-      console.log("Error submitting form")
+      console.log("Error submitting form");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
+      setDate("");
+      setJournalEntry("");
+      setMood("");
+      setSubject("");
     }
   };
 
@@ -49,6 +63,22 @@ export default function ModalScreen() {
             value={date}
             onChangeText={setDate}
           />
+          <Text style={{ alignSelf: "flex-start", marginTop: 20 }}>
+            Subject
+          </Text>
+          <TextInput
+            style={styles.inputField}
+            placeholder="Daily Note / Work / Personal..."
+            value={subject}
+            onChangeText={setSubject}
+          />
+          <Text style={{ alignSelf: "flex-start", marginTop: 20 }}>Mood</Text>
+          <TextInput
+            style={styles.inputField}
+            placeholder="Happy / Excited / Mad..."
+            value={mood}
+            onChangeText={setMood}
+          />
         </View>
         <View style={{ width: "65%", alignItems: "center", gap: 6 }}>
           <Text style={{ alignSelf: "flex-start" }}>Journal Entry</Text>
@@ -61,7 +91,7 @@ export default function ModalScreen() {
           />
         </View>
         <Pressable
-        onPress={handleSubmit}
+          onPress={handleSubmit}
           style={({ pressed }) => [
             { backgroundColor: pressed ? "#fee" : "#fff" },
             { width: pressed ? "34%" : "35%" },
