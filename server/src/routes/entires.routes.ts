@@ -27,10 +27,12 @@ router.get("/entries/:id", async (req, res, next) => {
 router.post("/new-entry", async (req, res, next) => {
   try {
     console.log("New Entry!", req.body);
-    const { note, date } = req.body;
+    const { note, date, subject, mood } = req.body;
     await Note.create({
-      note,
-      date,
+      note: note,
+      date: date,
+      subject: subject,
+      mood: mood,
     });
     res.status(200).json({ success: "Note created!" });
   } catch (error) {
