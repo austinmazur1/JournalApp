@@ -10,6 +10,14 @@ const journalEntrySchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    mood: {
+        type: String,
+        required: true,
+    },
+    subject: {
+        type: String,
+        required: true,
+    }
 })
 
 const Note = model("Note", journalEntrySchema)

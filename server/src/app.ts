@@ -4,7 +4,7 @@ dotenv.config();
 
 import express from 'express';
 import configureApp from './config'
-
+import cors from 'cors'
 import indexRoutes from "./routes/index.routes";
 import entryRoutes from "./routes/entires.routes"
 import authRoutes from "./routes/auth.routes";
@@ -16,6 +16,7 @@ require("./db");
 
 const app = express();
 configureApp(app)
+app.use(cors())
 
 // Add routes!
 app.use("/api", indexRoutes);
